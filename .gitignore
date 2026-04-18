@@ -1,0 +1,49 @@
+# Build outputs
+build/
+out/
+cmake-build-*/
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# IDEs
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiler / tooling
+compile_commands.json
+.cache/
+.ccls-cache/
+.vs/
+x64/
+x86/
+
+# Debug
+*.dSYM/
+*.pdb
+*.ilk
+
+# Testing / coverage
+*.gcov
+*.gcda
+*.gcno

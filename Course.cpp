@@ -1,12 +1,15 @@
 #include "Course.h"
 
-Course::Course(){}
-Course::Course(string CID, string CName, Instructor tech){
+Course::Course(){}  //adding this so we not getting error when it is empty 
+Course::Course(string CID, string CName, Instructor tech){ 
     CourseID = CID;
     CourseName = CName;
     Instructor = tech;
 
 }
+
+
+//Course Adding Students Method 
 void Course::AddStudent(Student s){
     bool areadythere = false;
         for (int i = 0; i < students.size(); i++) {
@@ -21,22 +24,31 @@ void Course::AddStudent(Student s){
     cout<<"Student successfully added"<<endl;
     }    
 }
+
+//Course Removing Students method
 void Course::RemoveStudent(string id){
     bool found = false;
-    for (int i = 0; i < students.size(); i++) {
-        if (students[i].ID == id) {
-            students.erase(i);
-            cout<<"Successfully deleted student : "<<id <<endl;
+ for (int i = 0; i < students.size(); i++){
+        if (students[i].ID == id){
+
+            // shift for the left side
+            for (int j = i; j < students.size() - 1; j++){
+                students[j] = students[j + 1];
+            }
+
+            students.pop_back(); 
             found = true;
             break;
         }
     }
+
     if (!found)
-cout<< "Student Not Found!" <<endl;
+        cout << "Student Not Found!" << endl;
+    
 }
 
-
-void Course::MarkAttendace(string StudentID , string date, bool present){
+//Course MarkAtt Method 
+void Course::MarkAttendance(string StudentID , string date, bool present){
     bool found = false;
 
     for (int i =0; i<students.size();i++){
@@ -51,13 +63,16 @@ void Course::MarkAttendace(string StudentID , string date, bool present){
         cout <<"Student not found !"<<endl;
     }
 }
-void Course::AssignTecher(string name){
+//To Assign the Instructor name 
+
+void Course::AssignInstructor(string name){
     Instructor = name;
 }
 
 
 
-void Course::ShowCourseReport(){
+//This will gives you a full report about the course
+void Course::ShowCourseReport() const {
 cout << "\n---------- COURSE REPORT ----------\n";
     cout << "Course ID: " << CourseID << endl;
     cout << "Course Name: " << CourseName << endl;
@@ -77,7 +92,7 @@ cout << "\n---------- COURSE REPORT ----------\n";
         cout<<"No Attendance submitted !"<<endl;
     }else{
         for (int i=0;i<attendance.size();i++){
-            attendace[i].display();
+            attendance[i].display();
                 }
     }
     cout << "---------------------------------------";

@@ -10,21 +10,19 @@
 
 using namespace std;
 class Course{
+    //Classs private data
 string CourseID;
 string CourseName;
-vector <Student> students; //creat dynamic list of students
+vector <Student> students; //To make the list extendable
 Instructor Instructor ;
-vector <AttendanceRecord> attendance;//creat dynamic list of attendance
+vector <AttendanceRecord> attendance;
 
 public:
-Course(){}
-Course(string CID, string CName, Instructor tech){
-    CourseID = CID;
-    CourseName = CName;
-    Instructor = tech;
-}
-void AddStudent(Student s);
+
+//Class Methods
+void AddStudent(Student s); 
 void RemoveStudent(string id);
-void MarkAttendace(string StudentID , string date, bool present);
+void AssignInstructor(string name);
+void MarkAttendance(string StudentID , string date, bool present);
 void ShowCourseReport() const;};
 #endif

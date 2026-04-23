@@ -37,6 +37,7 @@ void Course::RemoveStudent(string id){
             }
 
             students.pop_back(); 
+            cout<<"Successfully deleted student : "<<id <<endl;
             found = true;
             break;
         }

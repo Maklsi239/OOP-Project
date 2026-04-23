@@ -18,7 +18,9 @@ Instructor Instructor ;
 vector <AttendanceRecord> attendance;
 
 public:
-
+//define the constructors
+    Course();
+    Course(string CID, string CName, Instructor tech);
 //Class Methods
 void AddStudent(Student s); 
 void RemoveStudent(string id);

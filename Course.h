@@ -6,7 +6,7 @@
 #include <string>
 #include "Student.h"
 #include "Instructor.h"
-#include "AttendanceRecord.h"
+#include "attendancemanager.h"
 
 using namespace std;
 class Course{

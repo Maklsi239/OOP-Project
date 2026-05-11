@@ -13,8 +13,8 @@
     void removeStudents(string studentId); OK
     void assignInstructor(Instructor* instructor); OK
     void markAttendance(string studentsId,string date,string status); OK
-    void showCourseReport()const;
-    void hasStudent(string studentId);
+    void showCourseReport()const; OK
+    void hasStudent(string studentId); OK
 */
 
 

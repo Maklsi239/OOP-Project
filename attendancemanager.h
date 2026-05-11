@@ -11,15 +11,16 @@ using namespace std;
 #include "Instructor.h"
 #include "Course.h"
 
+
 class AttendanceManager {
 private:
     vector<Student> students;
     vector<Instructor> instructors;
     vector<Course> courses;
 
-    Student* findStudentById(int id);
-    Instructor* findInstructorById(int id);
-    Course* findCourseByCode(const string& code);
+Student* findStudentById(string id);
+Instructor* findInstructorById(string id);
+Course* findCourseByCode(const string& code);
 
 public:
     void addStudent();

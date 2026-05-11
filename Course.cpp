@@ -1,102 +1,133 @@
 #include "Course.h"
 
-Course::Course(){}  //adding this so we not getting error when it is empty 
-Course::Course(string CID, string CName, Instructor tech){ 
-    CourseID = CID;
-    CourseName = CName;
-    Instructor = tech;
+/*
+    Course(); OK
+    Course(string CourseCode, string CourseName); OK
+    ~Course(); OK
+//Class Methods
+    void setCorseCode(string code); OK
+    void getCourseCode(); OK 
+    void setCorseName(string code); OK 
+    void getCourseName(); OK 
+    void addStudent(Student* student); OK 
+    void removeStudents(string studentId); OK
+    void assignInstructor(Instructor* instructor); OK
+    void markAttendance(string studentsId,string date,string status); OK
+    void showCourseReport()const;
+    void hasStudent(string studentId);
+*/
+
+
+
+
+Course::Course(){instructor = NULL;}  //adding this so we not getting error when it is empty 
+Course::Course(string CourseCode, string CourseName):CourseCode(CourseCode),CourseName(CourseName){instructor = NULL;}
+
+void Course::setCorseCode(string code){
+    CourseCode = code;
+}
+string Course::getCourseCode()const{
+    return CourseCode;
+}
+
+void Course::setCorseName(string Name){
+    CourseName = Name;
+}
+string Course::getCourseName()const{
+    return CourseName;
+}
+
+void Course::addStudent(Student* student){
+    if (student == NULL){
+        cout<<"Invalid student"<<endl;
+        return;
+    }
+    if(hasStudent(student->getId())){
+        cout<<"Student already exists in this course "<<endl;
+        return;
+    }
+    students.push_back(student);
+    cout<<"Student added successfully"<<endl;
 
 }
 
 
-//Course Adding Students Method 
-void Course::AddStudent(Student s){
-    bool areadythere = false;
-        for (int i = 0; i < students.size(); i++) {
-        if (students[i].ID == s.ID) {
-            areadythere = true;
-            cout << "Student Already exists"<<endl;
-            break;
+void Course::removeStudents(string studentId){
+    for (int i=0; i<students.size();i++){
+        if (students[i]->getId() == studentId){
+            students.erase(students.begin()+i);
+            cout<<"Student - "<<studentId <<" removed successfully"<<endl;
+            return;
         }
     }
-    if (!areadythere){
-    students.push_back(s);
-    cout<<"Student successfully added"<<endl;
-    }    
+    cout<<"Student not Found"<<endl;
 }
 
-//Course Removing Students method
-void Course::RemoveStudent(string id){
-    bool found = false;
- for (int i = 0; i < students.size(); i++){
-        if (students[i].ID == id){
-
-            // shift for the left side
-            for (int j = i; j < students.size() - 1; j++){
-                students[j] = students[j + 1];
-            }
-
-            students.pop_back(); 
-            cout<<"Successfully deleted student : "<<id <<endl;
-            found = true;
-            break;
-        }
+void Course::assignInstructor(Instructor* instructor){
+    if (instructor == NULL){
+        cout<<"Invalid instructor"<<endl;
+        return;
     }
-
-    if (!found)
-        cout << "Student Not Found!" << endl;
-    
+    this->instructor = instructor;
+    cout<<"Instructor assigned successfully"<<endl;
 }
 
-//Course MarkAtt Method 
-void Course::MarkAttendance(string StudentID , string date, bool present){
-    bool found = false;
-
-    for (int i =0; i<students.size();i++){
-        if (students[i].ID == StudentID){
-            found = true;
-            break;
-        }
+void Course::markAttendance(string studentID,string date,string status){
+    if (!hasStudent(studentID)){
+        cout<<"Student not found in this course "<<endl;
+        return;
     }
-    if (found)
-    attendance.push_back(AttendanceRecord(StudentID , date , present));
-    else{
-        cout <<"Student not found !"<<endl;
+    if (status != "Present" && status !="Absent"){
+        cout<<"Invalid Status , use Present or Absent !"<<endl;
+        return;
     }
-}
-//To Assign the Instructor name 
-
-void Course::AssignInstructor(string name){
-    Instructor = name;
+    AttendanceRecord record(studentID,date,status);
+    attendanceRecords.push_back(record);
+    cout<<"Attendance Marked Successfully"<<endl;
 }
 
+void Course::showCourseReport()const{
+    cout<<"====== Course Report ======"<<endl;
+    cout<<"Course Name : "<<CourseName<<endl;
+    cout<<"Course Code : "<<CourseCode<<endl;
 
-
-//This will gives you a full report about the course
-void Course::ShowCourseReport() const {
-cout << "\n---------- COURSE REPORT ----------\n";
-    cout << "Course ID: " << CourseID << endl;
-    cout << "Course Name: " << CourseName << endl;
-    cout << "Instructor: " << Instructor.Name << endl;
-    cout << "      -----Students-----       "<<endl;
-
-    if (students.size() ==0){
-        cout<<"NO Students Submitted"<<endl;
+    cout<<"Instructor Info : "<<endl;
+    if(instructor != NULL){
+        instructor->displayInfo();
     }else{
+        cout<<"No instructor assigned"<<endl;
+    }
+
+    cout<<"Students : "<<endl;
+    if (students.size()!=0){
         for (int i=0;i<students.size();i++){
-            cout<<i+1<<"- "<<students[i].Name<<" | "<<students[i].ID<<endl;
+            students[i]->displayInfo();
+            cout<<endl;
         }
-    }
-        cout << "      -----Attendance-----       "<<endl;
-
-        if (attendance.size() ==0){
-        cout<<"No Attendance submitted !"<<endl;
     }else{
-        for (int i=0;i<attendance.size();i++){
-            attendance[i].display();
-                }
+        cout<<"No students added"<<endl;
     }
-    cout << "---------------------------------------";
 
+    cout<<"Attendance Records :"<<endl;
+    if (attendanceRecords.size()!=0){
+        for (int i=0;i<attendanceRecords.size();i++){
+            attendanceRecords[i].displayInfo();
+            cout<<endl;
+        }
+    }else{
+        cout<<"No Attendance Records"<<endl;
+    }
 }
 
+bool Course::hasStudent(string studentID)const{
+    for (int i=0;i<students.size();i++){
+        if (students[i]->getId() == studentID){
+            return true;
+        }
+    }
+    return false;
+}
+
+Course::~Course(){
+    cout<<"Class Course Destructor Called "<<endl;
+};

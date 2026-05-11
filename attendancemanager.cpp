@@ -1,10 +1,10 @@
-#include "AttendanceManager.h"
+#include "attendancemanager.h"
 
 using namespace std;
 
 // ---------------- FIND FUNCTIONS ----------------
 
-Student* AttendanceManager::findStudentById(int id) {
+Student* AttendanceManager::findStudentById(string id) {
     for (int i = 0; i < students.size(); i++) {
         if (students[i].getId() == id) {
             return &students[i];
@@ -14,7 +14,7 @@ Student* AttendanceManager::findStudentById(int id) {
     return nullptr;
 }
 
-Instructor* AttendanceManager::findInstructorById(int id) {
+Instructor* AttendanceManager::findInstructorById(string id) {
     for (int i = 0; i < instructors.size(); i++) {
         if (instructors[i].getId() == id) {
             return &instructors[i];
@@ -40,7 +40,7 @@ void AttendanceManager::addStudent() {
     string name;
     string program;
 
-    int id;
+    string id;
     int level;
 
     float attendance;
@@ -74,7 +74,7 @@ void AttendanceManager::addInstructor() {
     string department;
     string course;
 
-    int id;
+    string id;
 
     cout << "Enter instructor name: ";
     cin >> name;
@@ -117,7 +117,7 @@ void AttendanceManager::createCourse() {
 // ---------------- ASSIGN STUDENT ----------------
 
 void AttendanceManager::assignStudentToCourse() {
-    int studentId;
+    string studentId;
     string courseCode;
 
     cout << "Enter student ID: ";
@@ -139,7 +139,7 @@ void AttendanceManager::assignStudentToCourse() {
         return;
     }
 
-    c->addStudent(*s);
+    c->addStudent(s);
 
     cout << "Student assigned successfully.\n";
 }
@@ -147,7 +147,7 @@ void AttendanceManager::assignStudentToCourse() {
 // ---------------- ASSIGN INSTRUCTOR ----------------
 
 void AttendanceManager::assignInstructorToCourse() {
-    int instructorId;
+    string instructorId;
     string courseCode;
 
     cout << "Enter instructor ID: ";
@@ -169,7 +169,7 @@ void AttendanceManager::assignInstructorToCourse() {
         return;
     }
 
-    c->assignInstructor(*i);
+    c->assignInstructor(i);
 
     cout << "Instructor assigned successfully.\n";
 }
@@ -177,22 +177,24 @@ void AttendanceManager::assignInstructorToCourse() {
 // ---------------- MARK ATTENDANCE ----------------
 
 void AttendanceManager::markAttendance() {
+    cin.ignore();
+
     string courseCode;
-    int studentId;
+    string studentId;
     string date;
     string status;
 
     cout << "Enter course code: ";
-    cin >> courseCode;
+    getline(cin,courseCode);
 
     cout << "Enter student ID: ";
-    cin >> studentId;
+    getline(cin,studentId);
 
     cout << "Enter date: ";
-    cin >> date;
+    getline(cin,date);
 
     cout << "Enter status (Present/Absent): ";
-    cin >> status;
+    getline(cin,status);
 
     Course* c = findCourseByCode(courseCode);
 
@@ -203,7 +205,6 @@ void AttendanceManager::markAttendance() {
 
     c->markAttendance(studentId, date, status);
 
-    cout << "Attendance marked successfully.\n";
 }
 
 // ---------------- VIEW REPORTS ----------------
@@ -227,6 +228,7 @@ void AttendanceManager::viewReports() {
 // ---------------- MAIN MENU ----------------
 
 void AttendanceManager::run() {
+    
     int choice;
 
     do {

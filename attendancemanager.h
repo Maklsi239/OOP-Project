@@ -14,9 +14,9 @@ using namespace std;
 
 class AttendanceManager {
 private:
-    vector<Student> students;
-    vector<Instructor> instructors;
-    vector<Course> courses;
+    vector<Student*> students;
+    vector<Instructor*> instructors;
+    vector<Course*> courses;
 
 Student* findStudentById(string id);
 Instructor* findInstructorById(string id);

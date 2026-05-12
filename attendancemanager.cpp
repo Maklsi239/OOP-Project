@@ -1,11 +1,12 @@
 #include "attendancemanager.h"
+#include <limits>
 
 using namespace std;
 
 // ---------------- FIND FUNCTIONS ----------------
 
 Student* AttendanceManager::findStudentById(string id) {
-    for (int i = 0; i < students.size(); i++) {
+    for (size_t i = 0; i < students.size(); i++) {
         if (students[i].getId() == id) {
             return &students[i];
         }
@@ -15,7 +16,7 @@ Student* AttendanceManager::findStudentById(string id) {
 }
 
 Instructor* AttendanceManager::findInstructorById(string id) {
-    for (int i = 0; i < instructors.size(); i++) {
+    for (size_t i = 0; i < instructors.size(); i++) {
         if (instructors[i].getId() == id) {
             return &instructors[i];
         }
@@ -25,7 +26,7 @@ Instructor* AttendanceManager::findInstructorById(string id) {
 }
 
 Course* AttendanceManager::findCourseByCode(const string& code) {
-    for (int i = 0; i < courses.size(); i++) {
+    for (size_t i = 0; i < courses.size(); i++) {
         if (courses[i].getCourseCode() == code) {
             return &courses[i];
         }
@@ -43,7 +44,6 @@ void AttendanceManager::addStudent() {
     string id;
     int level;
 
-    float attendance;
 
     cout << "Enter student name: ";
     cin >> name;
@@ -56,11 +56,11 @@ void AttendanceManager::addStudent() {
 
     cout << "Enter level: ";
     cin >> level;
-
-    cout << "Enter attendance percentage: ";
-    cin >> attendance;
-
-    Student s(name, id, program, level, attendance);
+     if (findStudentById(id) != nullptr) {
+        cout << "Student ID already exists.\n";
+        return;
+    }
+    Student s(name, id, program, level);
 
     students.push_back(s);
 
@@ -87,6 +87,16 @@ void AttendanceManager::addInstructor() {
 
     cout << "Enter course taught: ";
     cin >> course;
+    if (findInstructorById(id) != nullptr) {
+    cout << "Instructor ID already exists.\n";
+    return;
+}
+
+    if (findInstructorById(id) != nullptr) {
+    cout << "Instructor ID already exists.\n";
+    return;
+}
+
 
     Instructor i(name, id, department, course);
 
@@ -106,7 +116,10 @@ void AttendanceManager::createCourse() {
 
     cout << "Enter course name: ";
     cin >> name;
-
+if (findCourseByCode(code) != nullptr) {
+    cout << "Course code already exists.\n";
+    return;
+}
     Course c(code, name);
 
     courses.push_back(c);
@@ -243,7 +256,12 @@ void AttendanceManager::run() {
         cout << "0. Exit\n";
 
         cout << "Enter choice: ";
-        cin >> choice;
+        if (!(cin >> choice)) {
+    cout << "Invalid input. Please enter a number.\n";
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    continue;
+}
 
         switch (choice) {
         case 1:

@@ -22,7 +22,7 @@ public:
     std::string getStudentId() const;
     std::string getDate() const;
     std::string getStatus() const;
-
+    void setStatus(std::string status);
     void displayInfo() const;
 
     friend std::ostream& operator<<(std::ostream& out, const AttendanceRecord& r);

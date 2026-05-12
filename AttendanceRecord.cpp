@@ -29,6 +29,11 @@ void AttendanceRecord::displayInfo() const {
     std::cout << "Date: " << date << std::endl;
     std::cout << "Status: " << status << std::endl;
 }
+void AttendanceRecord::setStatus(std::string status) {
+    if (status == "Present" || status == "Absent") {
+        this->status = status;
+    }
+}
 
 std::ostream& operator<<(std::ostream& out, const AttendanceRecord& r) {
     out << r.studentId << " | " << r.date << " | " << r.status;

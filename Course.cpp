@@ -53,7 +53,7 @@ void Course::addStudent(Student* student){
 
 
 void Course::removeStudents(string studentId){
-    for (int i=0; i<students.size();i++){
+    for (size_t i=0; i<students.size(); i++){
         if (students[i]->getId() == studentId){
             students.erase(students.begin()+i);
             cout<<"Student - "<<studentId <<" removed successfully"<<endl;
@@ -72,18 +72,31 @@ void Course::assignInstructor(Instructor* instructor){
     cout<<"Instructor assigned successfully"<<endl;
 }
 
-void Course::markAttendance(string studentID,string date,string status){
-    if (!hasStudent(studentID)){
-        cout<<"Student not found in this course "<<endl;
+void Course::markAttendance(string studentID, string date, string status) {
+    if (!hasStudent(studentID)) {
+        cout << "Student not found in this course" << endl;
         return;
     }
-    if (status != "Present" && status !="Absent"){
-        cout<<"Invalid Status , use Present or Absent !"<<endl;
+
+    if (status != "Present" && status != "Absent") {
+        cout << "Invalid status. Use Present or Absent." << endl;
         return;
     }
-    AttendanceRecord record(studentID,date,status);
+
+    for (size_t i = 0; i < attendanceRecords.size(); i++) {
+        if (attendanceRecords[i].getStudentId() == studentID &&
+            attendanceRecords[i].getDate() == date) {
+
+            attendanceRecords[i].setStatus(status);
+            cout << "Attendance updated successfully" << endl;
+            return;
+        }
+    }
+
+    AttendanceRecord record(studentID, date, status);
     attendanceRecords.push_back(record);
-    cout<<"Attendance Marked Successfully"<<endl;
+
+    cout << "Attendance marked successfully" << endl;
 }
 
 void Course::showCourseReport()const{
@@ -100,7 +113,7 @@ void Course::showCourseReport()const{
 
     cout<<"Students : "<<endl;
     if (students.size()!=0){
-        for (int i=0;i<students.size();i++){
+        for (size_t i=0; i<students.size(); i++){
             students[i]->displayInfo();
             cout<<endl;
         }
@@ -110,7 +123,7 @@ void Course::showCourseReport()const{
 
     cout<<"Attendance Records :"<<endl;
     if (attendanceRecords.size()!=0){
-        for (int i=0;i<attendanceRecords.size();i++){
+        for (size_t i=0; i<attendanceRecords.size(); i++){
             attendanceRecords[i].displayInfo();
             cout<<endl;
         }
@@ -120,7 +133,7 @@ void Course::showCourseReport()const{
 }
 
 bool Course::hasStudent(string studentID)const{
-    for (int i=0;i<students.size();i++){
+    for (size_t i=0; i<students.size(); i++){
         if (students[i]->getId() == studentID){
             return true;
         }
@@ -128,6 +141,5 @@ bool Course::hasStudent(string studentID)const{
     return false;
 }
 
-Course::~Course(){
-    cout<<"Class Course Destructor Called "<<endl;
-};
+
+Course::~Course(){};

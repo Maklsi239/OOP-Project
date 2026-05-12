@@ -2,12 +2,11 @@
 #include <iostream>
 
 // Default student: uses Person() defaults, then sets student fields.
-Student::Student() : Person(), program("Undeclared"), level(1), attendance(0.0f) {}
+Student::Student() : Person(), program("Undeclared"), level(1) {}
 
 // Call Person(name, id) first, then store the student-specific members.
-Student::Student(std::string name, std::string id, std::string program, int level,
-                 float attendance)
-    : Person(name, id), program(program), level(level), attendance(attendance) {}
+Student::Student(std::string name, std::string id, std::string program, int level)
+    : Person(name, id), program(program), level(level){}
 
 std::string Student::getProgram() const {
     return program;
@@ -25,13 +24,7 @@ void Student::setLevel(int level) {
     this->level = level;
 }
 
-float Student::getAttendance() const {
-    return attendance;
-}
 
-void Student::setAttendance(float attendance) {
-    this->attendance = attendance;
-}
 
 // Polymorphism example: same function name as Person, but student prints more.
 void Student::displayInfo() {
@@ -40,5 +33,4 @@ void Student::displayInfo() {
     std::cout << "ID: " << id << std::endl;
     std::cout << "Program: " << program << std::endl;
     std::cout << "Level: " << level << std::endl;
-    std::cout << "Attendance %: " << attendance << std::endl;
 }

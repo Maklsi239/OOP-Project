@@ -7,8 +7,8 @@ using namespace std;
 
 Student* AttendanceManager::findStudentById(string id) {
     for (size_t i = 0; i < students.size(); i++) {
-        if (students[i].getId() == id) {
-            return &students[i];
+        if (students[i]->getId() == id) {
+            return students[i];
         }
     }
 
@@ -17,8 +17,8 @@ Student* AttendanceManager::findStudentById(string id) {
 
 Instructor* AttendanceManager::findInstructorById(string id) {
     for (size_t i = 0; i < instructors.size(); i++) {
-        if (instructors[i].getId() == id) {
-            return &instructors[i];
+        if (instructors[i]->getId() == id) {
+            return instructors[i];
         }
     }
 
@@ -27,8 +27,8 @@ Instructor* AttendanceManager::findInstructorById(string id) {
 
 Course* AttendanceManager::findCourseByCode(const string& code) {
     for (size_t i = 0; i < courses.size(); i++) {
-        if (courses[i].getCourseCode() == code) {
-            return &courses[i];
+        if (courses[i]->getCourseCode() == code) {
+            return courses[i];
         }
     }
 
@@ -44,15 +44,15 @@ void AttendanceManager::addStudent() {
     string id;
     int level;
 
-
+    cin.ignore();
     cout << "Enter student name: ";
-    cin >> name;
+    getline(cin, name);
 
     cout << "Enter student ID: ";
-    cin >> id;
+    getline(cin, id);
 
     cout << "Enter program: ";
-    cin >> program;
+    getline(cin, program);
 
     cout << "Enter level: ";
     cin >> level;
@@ -60,7 +60,7 @@ void AttendanceManager::addStudent() {
         cout << "Student ID already exists.\n";
         return;
     }
-    Student s(name, id, program, level);
+    Student* s = new Student(name, id, program, level);
 
     students.push_back(s);
 
@@ -75,30 +75,25 @@ void AttendanceManager::addInstructor() {
     string course;
 
     string id;
-
+    cin.ignore();
     cout << "Enter instructor name: ";
-    cin >> name;
+    getline(cin, name);
 
     cout << "Enter instructor ID: ";
-    cin >> id;
+    getline(cin, id);
 
     cout << "Enter department: ";
-    cin >> department;
+    getline(cin, department);
 
     cout << "Enter course taught: ";
-    cin >> course;
+    getline(cin, course);
     if (findInstructorById(id) != nullptr) {
     cout << "Instructor ID already exists.\n";
     return;
 }
 
-    if (findInstructorById(id) != nullptr) {
-    cout << "Instructor ID already exists.\n";
-    return;
-}
 
-
-    Instructor i(name, id, department, course);
+    Instructor* i = new Instructor(name, id, department, course);
 
     instructors.push_back(i);
 
@@ -113,14 +108,14 @@ void AttendanceManager::createCourse() {
 
     cout << "Enter course code: ";
     cin >> code;
-
+    cin.ignore();
     cout << "Enter course name: ";
-    cin >> name;
+    getline(cin, name);
 if (findCourseByCode(code) != nullptr) {
     cout << "Course code already exists.\n";
     return;
 }
-    Course c(code, name);
+    Course* c = new Course(code, name);
 
     courses.push_back(c);
 
@@ -154,7 +149,6 @@ void AttendanceManager::assignStudentToCourse() {
 
     c->addStudent(s);
 
-    cout << "Student assigned successfully.\n";
 }
 
 // ---------------- ASSIGN INSTRUCTOR ----------------
@@ -184,7 +178,6 @@ void AttendanceManager::assignInstructorToCourse() {
 
     c->assignInstructor(i);
 
-    cout << "Instructor assigned successfully.\n";
 }
 
 // ---------------- MARK ATTENDANCE ----------------
@@ -237,6 +230,16 @@ void AttendanceManager::viewReports() {
 
     c->showCourseReport();
 }
+
+//---------------- Destructor ----------------
+AttendanceManager::~AttendanceManager() {
+    for (size_t i = 0; i < students.size(); i++)
+        delete students[i];
+    for (size_t i = 0; i < instructors.size(); i++)
+        delete instructors[i];
+    for (size_t i = 0; i < courses.size(); i++)
+        delete courses[i];
+} // cleaned heap
 
 // ---------------- MAIN MENU ----------------
 

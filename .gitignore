@@ -47,3 +47,6 @@ x86/
 *.gcov
 *.gcda
 *.gcno
+
+# Local ad-hoc binaries
+oop_test

@@ -5,7 +5,7 @@ Instructor::Instructor()
     : Person(), department("Unknown"), course("Unknown") {}
 
 // Parameterized constructor
-Instructor::Instructor(string name, int id, string department, string course)
+Instructor::Instructor(string name, string id, string department, string course)
     : Person(name, id) {
 
     this->department = department;

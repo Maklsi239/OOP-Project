@@ -15,7 +15,8 @@ private:
 public:
     // Constructors
     Instructor();
-    Instructor(string name, int id, string department, string course);
+    // id is a string so it can hold IDs like "S1001" (matches Course / manager code).
+    Instructor(string name, string id, string department, string course);
 
     // Getters
     string getDepartment() const;

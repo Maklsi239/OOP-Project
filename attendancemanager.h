@@ -23,6 +23,7 @@ Instructor* findInstructorById(string id);
 Course* findCourseByCode(const string& code);
 
 public:
+    ~AttendanceManager();
     void addStudent();
     void addInstructor();
     void createCourse();

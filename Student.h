@@ -28,7 +28,7 @@ public:
     void setLevel(int level);
 
     // Override: replaces Person::displayInfo() for Student objects.
-    void displayInfo() override;
+    void displayInfo() const override;
 };
 
 #endif

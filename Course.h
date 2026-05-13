@@ -1,38 +1,61 @@
 #ifndef COURSE_H
 #define COURSE_H
-#include <iostream>
-#include <vector>
+
 #include <string>
+#include <vector>
 
 #include "Student.h"
 #include "Instructor.h"
 #include "AttendanceRecord.h"
 
 using namespace std;
-class Course{
-//Classs private data
-string CourseCode;
-string CourseName;
-Instructor* instructor ;
-vector <Student*> students;
-vector<AttendanceRecord> attendanceRecords;
+
+class Course {
+private:
+    string courseCode;
+    string courseName;
+
+    // Pointer: Course has one instructor assigned to it
+    Instructor* instructor;
+
+    // Vector + Pointer: Course has many students
+    vector<Student*> students;
+
+    // Composition: Course owns attendance records
+    vector<AttendanceRecord> attendanceRecords;
 
 public:
-//define the constructors
+    // Constructors
     Course();
-    Course(string CourseCode, string CourseName);
+    Course(string courseCode, string courseName);
+
+    // Destructor
     ~Course();
-//Class Methods
-    void setCorseCode(string code);
-    string getCourseCode()const;
-    void setCorseName(string Name);
-    string getCourseName()const;
+
+    // Setters and getters
+    void setCourseCode(string code);
+    string getCourseCode() const;
+
+    void setCourseName(string name);
+    string getCourseName() const;
+
+    // Course management functions
     void addStudent(Student* student);
+    void removeStudent(string studentId);
+
+    // Extra wrapper if old code uses removeStudents()
     void removeStudents(string studentId);
+
     void assignInstructor(Instructor* instructor);
-    void markAttendance(string studentsId,string date,string status);
-    void showCourseReport()const;
-    bool hasStudent(string studentId)const;
-    
+
+    // Attendance functions
+    void markAttendance(string studentId, string date, string status);
+
+    // Report function
+    void showCourseReport() const;
+
+    // Helper function
+    bool hasStudent(string studentId) const;
 };
+
 #endif

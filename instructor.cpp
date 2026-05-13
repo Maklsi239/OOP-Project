@@ -1,39 +1,32 @@
 #include "Instructor.h"
 
-// Default constructor
+#include <iostream>
+
 Instructor::Instructor()
     : Person(), department("Unknown"), course("Unknown") {}
 
-// Parameterized constructor
-Instructor::Instructor(string name, string id, string department, string course)
-    : Person(name, id) {
+Instructor::Instructor(std::string name, std::string id, std::string department, std::string course)
+    : Person(name, id), department(department), course(course) {}
 
-    this->department = department;
-    this->course = course;
-}
-
-// Getters
-string Instructor::getDepartment() const {
+std::string Instructor::getDepartment() const {
     return department;
 }
 
-string Instructor::getCourse() const {
+std::string Instructor::getCourse() const {
     return course;
 }
 
-// Setters
-void Instructor::setDepartment(string department) {
+void Instructor::setDepartment(std::string department) {
     this->department = department;
 }
 
-void Instructor::setCourse(string course) {
+void Instructor::setCourse(std::string course) {
     this->course = course;
 }
 
-// Display
-void Instructor::displayInfo() {
-    cout << "Instructor Name: " << name << endl;
-    cout << "ID: " << id << endl;
-    cout << "Department: " << department << endl;
-    cout << "Course: " << course << endl;
+void Instructor::displayInfo() const {
+    std::cout << "Instructor Name: " << name << std::endl;
+    std::cout << "ID: " << id << std::endl;
+    std::cout << "Department: " << department << std::endl;
+    std::cout << "Course: " << course << std::endl;
 }

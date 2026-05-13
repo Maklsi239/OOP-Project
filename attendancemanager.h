@@ -1,29 +1,26 @@
 #ifndef ATTENDANCEMANAGER_H
 #define ATTENDANCEMANAGER_H
 
-#include <vector>
 #include <string>
-#include <iostream>
+#include <vector>
 
-using namespace std;
-
-#include "Student.h"
-#include "Instructor.h"
 #include "Course.h"
-
+#include "Instructor.h"
+#include "Student.h"
 
 class AttendanceManager {
 private:
-    vector<Student*> students;
-    vector<Instructor*> instructors;
-    vector<Course*> courses;
+    std::vector<Student*> students;
+    std::vector<Instructor*> instructors;
+    std::vector<Course*> courses;
 
-Student* findStudentById(string id);
-Instructor* findInstructorById(string id);
-Course* findCourseByCode(const string& code);
+    Student* findStudentById(std::string id);
+    Instructor* findInstructorById(std::string id);
+    Course* findCourseByCode(const std::string& code);
 
 public:
     ~AttendanceManager();
+
     void addStudent();
     void addInstructor();
     void createCourse();
@@ -31,7 +28,6 @@ public:
     void assignInstructorToCourse();
     void markAttendance();
     void viewReports();
-
     void run();
 };
 

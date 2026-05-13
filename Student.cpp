@@ -6,7 +6,7 @@ Student::Student() : Person(), program("Undeclared"), level(1) {}
 
 // Call Person(name, id) first, then store the student-specific members.
 Student::Student(std::string name, std::string id, std::string program, int level)
-    : Person(name, id), program(program), level(level){}
+    : Person(name, id), program(program), level(level > 0 ? level : 1) {}
 
 std::string Student::getProgram() const {
     return program;
@@ -21,13 +21,15 @@ int Student::getLevel() const {
 }
 
 void Student::setLevel(int level) {
-    this->level = level;
+    if (level > 0) {
+        this->level = level;
+    }
 }
 
 
 
 // Polymorphism example: same function name as Person, but student prints more.
-void Student::displayInfo() {
+void Student::displayInfo() const {
     std::cout << "--- Student ---" << std::endl;
     std::cout << "Name: " << name << std::endl;
     std::cout << "ID: " << id << std::endl;

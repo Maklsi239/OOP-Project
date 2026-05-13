@@ -1,4 +1,5 @@
 #include "Person.h"
+#include <iostream>
 
 // Default constructor: gives safe starting values so the object is never "empty"
 // in a confusing way.
@@ -35,7 +36,7 @@ void Person::setId(std::string id) {
 
 // Base version: prints only what every Person has.
 // Student and Instructor will override this to add their extra fields.
-void Person::displayInfo() {
+void Person::displayInfo() const {
     std::cout << "Name: " << name << std::endl;
     std::cout << "ID: " << id << std::endl;
 }

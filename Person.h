@@ -1,7 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
 
-#include <iostream>
 #include <string>
 
 // Person is the BASE class for Student and Instructor.
@@ -41,7 +40,7 @@ public:
 
     // Virtual = "can be replaced in a child class with a different version".
     // Student and Instructor will override this to print their own details.
-    virtual void displayInfo();
+    virtual void displayInfo() const;
 };
 
 #endif

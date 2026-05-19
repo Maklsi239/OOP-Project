@@ -20,7 +20,8 @@ int ReportHelper::countTotalClasses(const string& studentId,
     }
     return total;
 }
- 
+
+
 // ─── countPresentClasses ─────────────────────────────────────────────────────
 int ReportHelper::countPresentClasses(const string& studentId,
                                       const vector<AttendanceRecord>& records) {
@@ -38,7 +39,8 @@ int ReportHelper::countPresentClasses(const string& studentId,
     }
     return present;
 }
- 
+
+
 // ─── calculatePercentage ─────────────────────────────────────────────────────
 double ReportHelper::calculatePercentage(const string& studentId,
                                          const vector<AttendanceRecord>& records) {
@@ -54,7 +56,8 @@ double ReportHelper::calculatePercentage(const string& studentId,
     int present = countPresentClasses(studentId, records);
     return (present * 100.0) / total;
 }
- 
+
+
 // ─── printStudentReport ──────────────────────────────────────────────────────
 void ReportHelper::printStudentReport(const Student* student,
                                       const vector<AttendanceRecord>& records) {

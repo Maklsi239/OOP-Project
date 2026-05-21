@@ -6,6 +6,7 @@
 
 // Holds one attendance entry for a student on a date.
 // (Your teammate owns the full design; this is a simple version so the project builds.)
+// test
 
 class AttendanceRecord {
 private:

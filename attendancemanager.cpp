@@ -6,149 +6,169 @@
 #include <sstream>
 #include <string>
 
-namespace {
-namespace Style = ConsoleStyle;
+using namespace std;
 
-std::string trim(const std::string& value) {
-    const std::string whitespace = " \t\r\n";
-    const size_t start = value.find_first_not_of(whitespace);
-    if (start == std::string::npos) {
+namespace {
+    string trim(const string& value) {
+        const string whitespace = " \t\r\n";
+
+        size_t start = value.find_first_not_of(whitespace);
+        if (start == string::npos) {
+            return "";
+        }
+
+        size_t end = value.find_last_not_of(whitespace);
+        return value.substr(start, end - start + 1);
+    }
+
+    void printMenu() {
+        cout << endl;
+        cout << ConsoleStyle::bold << ConsoleStyle::blue;
+        cout << "===== ATTENDANCE MANAGEMENT SYSTEM =====";
+        cout << ConsoleStyle::reset << endl;
+
+        cout << ConsoleStyle::cyan << "1." << ConsoleStyle::reset << " Add Student" << endl;
+        cout << ConsoleStyle::cyan << "2." << ConsoleStyle::reset << " Add Instructor" << endl;
+        cout << ConsoleStyle::cyan << "3." << ConsoleStyle::reset << " Create Course" << endl;
+        cout << ConsoleStyle::cyan << "4." << ConsoleStyle::reset << " Assign Student To Course" << endl;
+        cout << ConsoleStyle::cyan << "5." << ConsoleStyle::reset << " Assign Instructor To Course" << endl;
+        cout << ConsoleStyle::cyan << "6." << ConsoleStyle::reset << " Mark Attendance" << endl;
+        cout << ConsoleStyle::cyan << "7." << ConsoleStyle::reset << " View Reports" << endl;
+        cout << ConsoleStyle::cyan << "0." << ConsoleStyle::reset << " Exit" << endl;
+    }
+
+    bool readRequiredLine(const string& prompt, string& output) {
+        while (true) {
+            cout << ConsoleStyle::cyan << prompt << ConsoleStyle::reset;
+
+            if (!getline(cin, output)) {
+                return false;
+            }
+
+            output = trim(output);
+
+            if (!output.empty()) {
+                return true;
+            }
+
+            ConsoleStyle::warning("This field cannot be empty.");
+        }
+    }
+
+    bool readPositiveInt(const string& prompt, int& output) {
+        string input;
+
+        while (readRequiredLine(prompt, input)) {
+            istringstream stream(input);
+            int value = 0;
+            char extra = '\0';
+
+            if ((stream >> value) && !(stream >> extra) && value > 0) {
+                output = value;
+                return true;
+            }
+
+            ConsoleStyle::warning("Please enter a positive whole number.");
+        }
+
+        return false;
+    }
+
+    bool readMenuChoice(int& output) {
+        string input;
+
+        while (true) {
+            cout << ConsoleStyle::bold << "Enter choice: " << ConsoleStyle::reset;
+
+            if (!getline(cin, input)) {
+                return false;
+            }
+
+            input = trim(input);
+
+            istringstream stream(input);
+            int value = 0;
+            char extra = '\0';
+
+            if ((stream >> value) && !(stream >> extra)) {
+                output = value;
+                return true;
+            }
+
+            ConsoleStyle::error("Invalid input. Please enter a number.");
+        }
+    }
+
+    string normalizeStatus(const string& input) {
+        string lower;
+
+        for (char c : input) {
+            lower += static_cast<char>(tolower(static_cast<unsigned char>(c)));
+        }
+
+        if (lower == "present" || lower == "p") {
+            return "Present";
+        }
+
+        if (lower == "absent" || lower == "a") {
+            return "Absent";
+        }
+
         return "";
     }
-
-    const size_t end = value.find_last_not_of(whitespace);
-    return value.substr(start, end - start + 1);
 }
 
-void printMenu() {
-    std::cout << '\n'
-              << Style::bold << Style::blue
-              << "===== ATTENDANCE MANAGEMENT SYSTEM ====="
-              << Style::reset << '\n'
-              << Style::cyan << "1." << Style::reset << " Add Student\n"
-              << Style::cyan << "2." << Style::reset << " Add Instructor\n"
-              << Style::cyan << "3." << Style::reset << " Create Course\n"
-              << Style::cyan << "4." << Style::reset << " Assign Student To Course\n"
-              << Style::cyan << "5." << Style::reset << " Assign Instructor To Course\n"
-              << Style::cyan << "6." << Style::reset << " Mark Attendance\n"
-              << Style::cyan << "7." << Style::reset << " View Reports\n"
-              << Style::cyan << "0." << Style::reset << " Exit\n";
+AttendanceManager::AttendanceManager() {
 }
 
-bool readRequiredLine(const std::string& prompt, std::string& output) {
-    while (true) {
-        std::cout << Style::cyan << prompt << Style::reset;
-        if (!std::getline(std::cin, output)) {
-            return false;
-        }
+AttendanceManager::~AttendanceManager() {
+    for (Student* student : students) {
+        delete student;
+    }
 
-        output = trim(output);
-        if (!output.empty()) {
-            return true;
-        }
+    for (Instructor* instructor : instructors) {
+        delete instructor;
+    }
 
-        Style::warning("This field cannot be empty.");
+    for (Course* course : courses) {
+        delete course;
     }
 }
 
-bool readPositiveInt(const std::string& prompt, int& output) {
-    std::string input;
-
-    while (readRequiredLine(prompt, input)) {
-        std::istringstream stream(input);
-        int value = 0;
-        char extra = '\0';
-
-        if ((stream >> value) && !(stream >> extra) && value > 0) {
-            output = value;
-            return true;
-        }
-
-        Style::warning("Please enter a positive whole number.");
-    }
-
-    return false;
-}
-
-bool readMenuChoice(int& output) {
-    std::string input;
-
-    while (true) {
-        std::cout << Style::bold << "Enter choice: " << Style::reset;
-        if (!std::getline(std::cin, input)) {
-            return false;
-        }
-
-        input = trim(input);
-        std::istringstream stream(input);
-        int value = 0;
-        char extra = '\0';
-
-        if ((stream >> value) && !(stream >> extra)) {
-            output = value;
-            return true;
-        }
-
-        Style::error("Invalid input. Please enter a number.");
-    }
-}
-
-std::string normalizeStatus(const std::string& input) {
-    std::string lower;
-    for (char c : input) {
-        lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    }
-
-    if (lower == "present" || lower == "p") {
-        return "Present";
-    }
-
-    if (lower == "absent" || lower == "a") {
-        return "Absent";
-    }
-
-    return "";
-}
-}
-
-// ---------------- FIND FUNCTIONS ----------------
-
-Student* AttendanceManager::findStudentById(std::string id) {
-    for (size_t i = 0; i < students.size(); i++) {
-        if (students[i]->getId() == id) {
-            return students[i];
+Student* AttendanceManager::findStudentById(string id) {
+    for (Student* student : students) {
+        if (student != nullptr && student->getId() == id) {
+            return student;
         }
     }
 
     return nullptr;
 }
 
-Instructor* AttendanceManager::findInstructorById(std::string id) {
-    for (size_t i = 0; i < instructors.size(); i++) {
-        if (instructors[i]->getId() == id) {
-            return instructors[i];
+Instructor* AttendanceManager::findInstructorById(string id) {
+    for (Instructor* instructor : instructors) {
+        if (instructor != nullptr && instructor->getId() == id) {
+            return instructor;
         }
     }
 
     return nullptr;
 }
 
-Course* AttendanceManager::findCourseByCode(const std::string& code) {
-    for (size_t i = 0; i < courses.size(); i++) {
-        if (courses[i]->getCourseCode() == code) {
-            return courses[i];
+Course* AttendanceManager::findCourseByCode(const string& code) {
+    for (Course* course : courses) {
+        if (course != nullptr && course->getCourseCode() == code) {
+            return course;
         }
     }
 
     return nullptr;
 }
-
-// ---------------- ADD STUDENT ----------------
 
 void AttendanceManager::addStudent() {
-    std::string name;
-    std::string id;
-    std::string program;
+    string name;
+    string id;
+    string program;
     int level = 1;
 
     if (!readRequiredLine("Enter student name: ", name) ||
@@ -157,7 +177,7 @@ void AttendanceManager::addStudent() {
     }
 
     if (findStudentById(id) != nullptr) {
-        Style::error("Student ID already exists.");
+        ConsoleStyle::error("Student ID already exists.");
         return;
     }
 
@@ -166,19 +186,17 @@ void AttendanceManager::addStudent() {
         return;
     }
 
-    Student* s = new Student(name, id, program, level);
-    students.push_back(s);
+    Student* student = new Student(name, id, program, level);
+    students.push_back(student);
 
-    Style::success("Student added successfully.");
+    ConsoleStyle::success("Student added successfully.");
 }
 
-// ---------------- ADD INSTRUCTOR ----------------
-
 void AttendanceManager::addInstructor() {
-    std::string name;
-    std::string id;
-    std::string department;
-    std::string course;
+    string name;
+    string id;
+    string department;
+    string course;
 
     if (!readRequiredLine("Enter instructor name: ", name) ||
         !readRequiredLine("Enter instructor ID: ", id)) {
@@ -186,7 +204,7 @@ void AttendanceManager::addInstructor() {
     }
 
     if (findInstructorById(id) != nullptr) {
-        Style::error("Instructor ID already exists.");
+        ConsoleStyle::error("Instructor ID already exists.");
         return;
     }
 
@@ -195,24 +213,22 @@ void AttendanceManager::addInstructor() {
         return;
     }
 
-    Instructor* i = new Instructor(name, id, department, course);
-    instructors.push_back(i);
+    Instructor* instructor = new Instructor(name, id, department, course);
+    instructors.push_back(instructor);
 
-    Style::success("Instructor added successfully.");
+    ConsoleStyle::success("Instructor added successfully.");
 }
 
-// ---------------- CREATE COURSE ----------------
-
 void AttendanceManager::createCourse() {
-    std::string code;
-    std::string name;
+    string code;
+    string name;
 
     if (!readRequiredLine("Enter course code: ", code)) {
         return;
     }
 
     if (findCourseByCode(code) != nullptr) {
-        Style::error("Course code already exists.");
+        ConsoleStyle::error("Course code already exists.");
         return;
     }
 
@@ -220,73 +236,67 @@ void AttendanceManager::createCourse() {
         return;
     }
 
-    Course* c = new Course(code, name);
-    courses.push_back(c);
+    Course* course = new Course(code, name);
+    courses.push_back(course);
 
-    Style::success("Course created successfully.");
+    ConsoleStyle::success("Course created successfully.");
 }
 
-// ---------------- ASSIGN STUDENT ----------------
-
 void AttendanceManager::assignStudentToCourse() {
-    std::string studentId;
-    std::string courseCode;
+    string studentId;
+    string courseCode;
 
     if (!readRequiredLine("Enter student ID: ", studentId) ||
         !readRequiredLine("Enter course code: ", courseCode)) {
         return;
     }
 
-    Student* s = findStudentById(studentId);
-    Course* c = findCourseByCode(courseCode);
+    Student* student = findStudentById(studentId);
+    Course* course = findCourseByCode(courseCode);
 
-    if (s == nullptr) {
-        Style::error("Student not found.");
+    if (student == nullptr) {
+        ConsoleStyle::error("Student not found.");
         return;
     }
 
-    if (c == nullptr) {
-        Style::error("Course not found.");
+    if (course == nullptr) {
+        ConsoleStyle::error("Course not found.");
         return;
     }
 
-    c->addStudent(s);
+    course->addStudent(student);
 }
 
-// ---------------- ASSIGN INSTRUCTOR ----------------
-
 void AttendanceManager::assignInstructorToCourse() {
-    std::string instructorId;
-    std::string courseCode;
+    string instructorId;
+    string courseCode;
 
     if (!readRequiredLine("Enter instructor ID: ", instructorId) ||
         !readRequiredLine("Enter course code: ", courseCode)) {
         return;
     }
 
-    Instructor* i = findInstructorById(instructorId);
-    Course* c = findCourseByCode(courseCode);
+    Instructor* instructor = findInstructorById(instructorId);
+    Course* course = findCourseByCode(courseCode);
 
-    if (i == nullptr) {
-        Style::error("Instructor not found.");
+    if (instructor == nullptr) {
+        ConsoleStyle::error("Instructor not found.");
         return;
     }
 
-    if (c == nullptr) {
-        Style::error("Course not found.");
+    if (course == nullptr) {
+        ConsoleStyle::error("Course not found.");
         return;
     }
 
-    c->assignInstructor(i);
+    course->assignInstructor(instructor);
 }
 
-// ---------------- MARK ATTENDANCE ----------------
-
 void AttendanceManager::markAttendance() {
-    std::string courseCode;
-    std::string studentId;
-    std::string date;
-    std::string statusInput;
+    string courseCode;
+    string studentId;
+    string date;
+    string statusInput;
 
     if (!readRequiredLine("Enter course code: ", courseCode) ||
         !readRequiredLine("Enter student ID: ", studentId) ||
@@ -295,62 +305,46 @@ void AttendanceManager::markAttendance() {
         return;
     }
 
-    Course* c = findCourseByCode(courseCode);
+    Course* course = findCourseByCode(courseCode);
 
-    if (c == nullptr) {
-        Style::error("Course not found.");
+    if (course == nullptr) {
+        ConsoleStyle::error("Course not found.");
         return;
     }
 
-    const std::string status = normalizeStatus(statusInput);
+    string status = normalizeStatus(statusInput);
+
     if (status.empty()) {
-        Style::error("Invalid status. Use Present, Absent, P, or A.");
+        ConsoleStyle::error("Invalid status. Use Present, Absent, P, or A.");
         return;
     }
 
-    c->markAttendance(studentId, date, status);
+    course->markAttendance(studentId, date, status);
 }
 
-// ---------------- VIEW REPORTS ----------------
-
 void AttendanceManager::viewReports() {
-    std::string courseCode;
+    string courseCode;
 
     if (!readRequiredLine("Enter course code: ", courseCode)) {
         return;
     }
 
-    Course* c = findCourseByCode(courseCode);
+    Course* course = findCourseByCode(courseCode);
 
-    if (c == nullptr) {
-        Style::error("Course not found.");
+    if (course == nullptr) {
+        ConsoleStyle::error("Course not found.");
         return;
     }
 
-    c->showCourseReport();
+    course->showCourseReport();
 }
-
-// ---------------- DESTRUCTOR ----------------
-
-AttendanceManager::~AttendanceManager() {
-    for (size_t i = 0; i < students.size(); i++) {
-        delete students[i];
-    }
-    for (size_t i = 0; i < instructors.size(); i++) {
-        delete instructors[i];
-    }
-    for (size_t i = 0; i < courses.size(); i++) {
-        delete courses[i];
-    }
-}
-
-// ---------------- MAIN MENU ----------------
 
 void AttendanceManager::run() {
     int choice = -1;
 
     do {
         printMenu();
+
         if (!readMenuChoice(choice)) {
             break;
         }
@@ -385,11 +379,12 @@ void AttendanceManager::run() {
             break;
 
         case 0:
-            std::cout << Style::yellow << "Exiting program..." << Style::reset << '\n';
+            cout << ConsoleStyle::yellow << "Exiting program..." << ConsoleStyle::reset << endl;
             break;
 
         default:
-            Style::warning("Invalid choice.");
+            ConsoleStyle::warning("Invalid choice.");
+            break;
         }
 
     } while (choice != 0);

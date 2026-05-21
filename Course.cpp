@@ -7,11 +7,6 @@
 
 using namespace std;
 
-namespace {
-namespace Style = ConsoleStyle;
-}
-
-
 Course::Course() {
     courseCode = "";
     courseName = "";
@@ -24,11 +19,8 @@ Course::Course(string courseCode, string courseName) {
     instructor = nullptr;
 }
 
-
 Course::~Course() {
-
 }
-
 
 void Course::setCourseCode(string code) {
     courseCode = code;
@@ -46,34 +38,32 @@ string Course::getCourseName() const {
     return courseName;
 }
 
-
 void Course::addStudent(Student* student) {
     if (student == nullptr) {
-        Style::error("Invalid student.");
+        ConsoleStyle::error("Invalid student.");
         return;
     }
 
     if (hasStudent(student->getId())) {
-        Style::warning("Student already exists in this course.");
+        ConsoleStyle::warning("Student already exists in this course.");
         return;
     }
 
     students.push_back(student);
-    Style::success("Student added to course successfully.");
+    ConsoleStyle::success("Student added to course successfully.");
 }
 
-
 void Course::removeStudent(string studentId) {
-    vector<Student*>::iterator student = find_if(
+    auto student = find_if(
         students.begin(),
         students.end(),
         [&studentId](Student* current) {
-            return current->getId() == studentId;
+            return current != nullptr && current->getId() == studentId;
         }
     );
 
     if (student == students.end()) {
-        Style::warning("Student not found in this course.");
+        ConsoleStyle::warning("Student not found in this course.");
         return;
     }
 
@@ -90,110 +80,113 @@ void Course::removeStudent(string studentId) {
         attendanceRecords.end()
     );
 
-    Style::success("Student removed from course successfully.");
+    ConsoleStyle::success("Student removed from course successfully.");
 }
 
 void Course::removeStudents(string studentId) {
     removeStudent(studentId);
 }
 
-
 void Course::assignInstructor(Instructor* instructor) {
     if (instructor == nullptr) {
-        Style::error("Invalid instructor.");
+        ConsoleStyle::error("Invalid instructor.");
         return;
     }
 
     this->instructor = instructor;
-    Style::success("Instructor assigned successfully.");
+    ConsoleStyle::success("Instructor assigned successfully.");
 }
-
 
 void Course::markAttendance(string studentId, string date, string status) {
     if (!hasStudent(studentId)) {
-        Style::error("Student not found in this course.");
+        ConsoleStyle::error("Student not found in this course.");
         return;
     }
 
     if (status != "Present" && status != "Absent") {
-        Style::error("Invalid status. Use Present or Absent.");
+        ConsoleStyle::error("Invalid status. Use Present or Absent.");
         return;
     }
 
-    // If same student and same date already exists, update it
     for (AttendanceRecord& record : attendanceRecords) {
-        if (record.getStudentId() == studentId && record.getDate() == date) {
+        if (record.getStudentId() == studentId &&
+            record.getDate() == date) {
             record.setStatus(status);
-            Style::success("Attendance updated successfully.");
+            ConsoleStyle::success("Attendance updated successfully.");
             return;
         }
     }
 
-    // If not create new attendance record
     AttendanceRecord record(studentId, date, status);
     attendanceRecords.push_back(record);
 
-    Style::success("Attendance marked successfully.");
+    ConsoleStyle::success("Attendance marked successfully.");
 }
 
-
 void Course::showCourseReport() const {
-    cout << Style::bold << Style::blue
-         << "\n========== COURSE REPORT =========="
-         << Style::reset << endl;
+    cout << ConsoleStyle::bold << ConsoleStyle::blue;
+    cout << "\n========== COURSE REPORT ==========" << ConsoleStyle::reset << endl;
 
-    cout << Style::cyan << "Course Name: " << Style::reset << courseName << endl;
-    cout << Style::cyan << "Course Code: " << Style::reset << courseCode << endl;
+    cout << ConsoleStyle::cyan << "Course Name: " << ConsoleStyle::reset
+         << courseName << endl;
 
-    // Instructor info
-    cout << Style::bold << "\n----- Instructor Info -----" << Style::reset << endl;
+    cout << ConsoleStyle::cyan << "Course Code: " << ConsoleStyle::reset
+         << courseCode << endl;
+
+    cout << ConsoleStyle::bold << "\n----- Instructor Info -----"
+         << ConsoleStyle::reset << endl;
 
     if (instructor != nullptr) {
         instructor->displayInfo();
     } else {
-        Style::warning("No instructor assigned.");
+        ConsoleStyle::warning("No instructor assigned.");
     }
 
-    // Students info
-    cout << Style::bold << "\n----- Students In Course -----" << Style::reset << endl;
+    cout << ConsoleStyle::bold << "\n----- Students In Course -----"
+         << ConsoleStyle::reset << endl;
 
     if (!students.empty()) {
         for (const Student* student : students) {
-            student->displayInfo();
-            cout << endl;
+            if (student != nullptr) {
+                student->displayInfo();
+                cout << endl;
+            }
         }
     } else {
-        Style::warning("No students added to this course.");
+        ConsoleStyle::warning("No students added to this course.");
     }
 
-    // Attendance percentage using ReportHelper
-    cout << Style::bold << "\n----- Attendance Percentage Report -----" << Style::reset << endl;
+    cout << ConsoleStyle::bold << "\n----- Attendance Percentage Report -----"
+         << ConsoleStyle::reset << endl;
 
     if (!students.empty()) {
         for (const Student* student : students) {
-            ReportHelper::printStudentReport(student, attendanceRecords);
-            cout << endl;
+            try {
+                ReportHelper::printStudentReport(student, attendanceRecords);
+                cout << endl;
+            } catch (const exception& e) {
+                ConsoleStyle::error(e.what());
+            }
         }
     } else {
-        Style::warning("No students available for attendance report.");
+        ConsoleStyle::warning("No students available for attendance report.");
     }
 
-    //  attendance records
-    cout << Style::bold << "\n----- Attendance Records -----" << Style::reset << endl;
+    cout << ConsoleStyle::bold << "\n----- Attendance Records -----"
+         << ConsoleStyle::reset << endl;
 
     if (!attendanceRecords.empty()) {
         for (const AttendanceRecord& record : attendanceRecords) {
             cout << record << endl;
         }
     } else {
-        Style::warning("No attendance records found.");
+        ConsoleStyle::warning("No attendance records found.");
     }
 }
 
-
 bool Course::hasStudent(string studentId) const {
     for (const Student* student : students) {
-        if (student->getId() == studentId) {
+        if (student != nullptr && student->getId() == studentId) {
             return true;
         }
     }

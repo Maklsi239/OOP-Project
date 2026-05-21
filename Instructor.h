@@ -2,22 +2,25 @@
 #define INSTRUCTOR_H
 
 #include "Person.h"
+
 #include <string>
+
+using namespace std;
 
 class Instructor : public Person {
 private:
-    std::string department;
-    std::string course;
+    string department;
+    string course;
 
 public:
     Instructor();
-    Instructor(std::string name, std::string id, std::string department, std::string course);
+    Instructor(string name, string id, string department, string course);
 
-    std::string getDepartment() const;
-    std::string getCourse() const;
+    string getDepartment() const;
+    string getCourse() const;
 
-    void setDepartment(std::string department);
-    void setCourse(std::string course);
+    void setDepartment(string department);
+    void setCourse(string course);
 
     void displayInfo() const override;
 };

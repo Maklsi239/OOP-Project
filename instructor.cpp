@@ -2,31 +2,38 @@
 
 #include <iostream>
 
-Instructor::Instructor()
-    : Person(), department("Unknown"), course("Unknown") {}
+using namespace std;
 
-Instructor::Instructor(std::string name, std::string id, std::string department, std::string course)
-    : Person(name, id), department(department), course(course) {}
+Instructor::Instructor() : Person() {
+    department = "Unknown";
+    course = "Unknown";
+}
 
-std::string Instructor::getDepartment() const {
+Instructor::Instructor(string name, string id, string department, string course)
+    : Person(name, id) {
+    this->department = department;
+    this->course = course;
+}
+
+string Instructor::getDepartment() const {
     return department;
 }
 
-std::string Instructor::getCourse() const {
+string Instructor::getCourse() const {
     return course;
 }
 
-void Instructor::setDepartment(std::string department) {
+void Instructor::setDepartment(string department) {
     this->department = department;
 }
 
-void Instructor::setCourse(std::string course) {
+void Instructor::setCourse(string course) {
     this->course = course;
 }
 
 void Instructor::displayInfo() const {
-    std::cout << "Instructor Name: " << name << std::endl;
-    std::cout << "ID: " << id << std::endl;
-    std::cout << "Department: " << department << std::endl;
-    std::cout << "Course: " << course << std::endl;
+    cout << "Instructor Name: " << name << endl;
+    cout << "ID: " << id << endl;
+    cout << "Department: " << department << endl;
+    cout << "Course: " << course << endl;
 }

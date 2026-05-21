@@ -4,29 +4,29 @@
 #include <iostream>
 #include <string>
 
-// Holds one attendance entry for a student on a date.
-// (Your teammate owns the full design; this is a simple version so the project builds.)
-// test
+using namespace std;
 
 class AttendanceRecord {
 private:
-    std::string studentId;
-    std::string date;
-    std::string status; // "Present" or "Absent"
+    string studentId;
+    string date;
+    string status;
 
 public:
     AttendanceRecord();
+    AttendanceRecord(string studentId, string date, string status);
 
-    // Validates status: only "Present" or "Absent" are accepted.
-    AttendanceRecord(std::string studentId, std::string date, std::string status);
+    string getStudentId() const;
+    string getDate() const;
+    string getStatus() const;
 
-    std::string getStudentId() const;
-    std::string getDate() const;
-    std::string getStatus() const;
-    void setStatus(std::string status);
+    void setStudentId(string studentId);
+    void setDate(string date);
+    void setStatus(string status);
+
     void displayInfo() const;
 
-    friend std::ostream& operator<<(std::ostream& out, const AttendanceRecord& r);
+    friend ostream& operator<<(ostream& out, const AttendanceRecord& record);
 };
 
 #endif

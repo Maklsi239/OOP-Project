@@ -53,6 +53,14 @@ void AttendanceRecord::displayInfo() const {
     cout << "Status: " << status << endl;
 }
 
+bool AttendanceRecord::isPresent() const {
+    return status == "Present";
+}
+
+bool AttendanceRecord::isAbsent() const {
+    return status == "Absent";
+}
+
 ostream& operator<<(ostream& out, const AttendanceRecord& record) {
     out << "Student ID: " << record.studentId
         << " | Date: " << record.date

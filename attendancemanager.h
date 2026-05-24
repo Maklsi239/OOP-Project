@@ -16,6 +16,16 @@ private:
     vector<Instructor*> instructors;
     vector<Course*> courses;
 
+    void loadDefaultCourses();
+    void printMenu() const;
+    void showStudents() const;
+    void showCourseCodes() const;
+    bool readRequiredLine(string prompt, string& output) const;
+    bool readPositiveInt(string prompt, int& output) const;
+    bool readMenuChoice(int& output) const;
+    string normalizeStatus(string input) const;
+    Course* chooseCourse() const;
+
     Student* findStudentById(string id);
     Instructor* findInstructorById(string id);
     Course* findCourseByCode(const string& code);
@@ -26,13 +36,15 @@ public:
 
     void addStudent();
     void addInstructor();
-    void createCourse();
+    void listCourses() const;
 
     void assignStudentToCourse();
-    void assignInstructorToCourse();
+    void deleteStudent();
+    void deleteInstructor();
 
     void markAttendance();
     void viewReports();
+    void viewStudentRecord();
 
     void run();
 };

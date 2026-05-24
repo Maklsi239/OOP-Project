@@ -24,6 +24,9 @@ public:
     void setDate(string date);
     void setStatus(string status);
 
+    bool isPresent() const;
+    bool isAbsent() const;
+
     void displayInfo() const;
 
     friend ostream& operator<<(ostream& out, const AttendanceRecord& record);

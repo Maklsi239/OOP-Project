@@ -150,7 +150,7 @@ void Course::showCourseReport() const {
         cout << string(65, '-') << endl;
         for (const Student* student : students) {
             if (student != nullptr) {
-                cout << student->getId()<<"                     " << student->getName()<< "                      "  << student->getProgram()<<"      "<< student->getYear() << endl;}
+                cout << student->getId()<<"                     " << student->getName()<< "         "  << student->getProgram()<<"      "<<student->getYear<< endl;}
         }} else {
         cout << "No students added to this course." <<"\n"<< endl;}
 
@@ -165,7 +165,7 @@ void Course::showCourseReport() const {
                 int total = ReportHelper::countTotalClasses(student->getId(), attendanceRecords);
                 int present = ReportHelper::countPresentClasses(student->getId(), attendanceRecords);
                 double percentage = ReportHelper::calculatePercentage(student->getId(), attendanceRecords);
-                cout << student->getId()<< "                            " << student->getName()<< "                " << present<< "                " << total<< "    "<< percentage << "%" << endl;
+                cout << student->getId()<< "                    " << student->getName()<< "            " << present<< "               " << total<< "      "<< percentage << "%" << endl;
             } catch (const exception& e) {
                 cout << "" << e.what() << endl;}}} else {
         cout << "No students available for attendance report." <<"\n"<< endl;}
@@ -177,7 +177,7 @@ void Course::showCourseReport() const {
         cout << "Student ID"<< "                  " << "Date"<<"     "<< "Status" << endl;
         cout << string(45, '-') << endl;
         for (const AttendanceRecord& record : attendanceRecords) {
-            cout << record.getStudentId()<< "                  " << record.getDate()<<"                  " <<record.getStatus() << endl;}
+            cout << record.getStudentId()<< "                  " << record.getDate()<<"  " <<record.getStatus() << endl;}
     } else {
         cout << "No attendance records found." << endl;}
 }

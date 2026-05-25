@@ -32,8 +32,8 @@ void Instructor::setCourse(string course) {
 }
 
 void Instructor::displayInfo() const {
-    cout << "Instructor Name: " << name << endl;
-    cout << "ID: " << id << endl;
-    cout << "Department: " << department << endl;
-    cout << "Course: " << course << endl;
+    cout << "Instructor Name: " << name << "\n";
+    cout << "ID: " << id << "\n";
+    cout << "Department: " << department << "\n";
+    cout << "Course: " << course << "\n";
 }

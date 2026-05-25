@@ -1,22 +1,21 @@
 #include "Student.h"
-
 #include <iostream>
 
 using namespace std;
 
 Student::Student() : Person() {
     program = "Unknown";
-    level = 1;
+    year = 1;
 }
 
-Student::Student(string name, string id, string program, int level)
+Student::Student(string name, string id, string program, int year)
     : Person(name, id) {
     this->program = program;
 
-    if (level > 0) {
-        this->level = level;
+    if (year > 0) {
+        this->year = year;
     } else {
-        this->level = 1;
+        this->year = 1;
     }
 }
 
@@ -28,13 +27,13 @@ void Student::setProgram(string program) {
     this->program = program;
 }
 
-int Student::getLevel() const {
-    return level;
+int Student::getYear() const {
+    return year;
 }
 
-void Student::setLevel(int level) {
-    if (level > 0) {
-        this->level = level;
+void Student::setYear(int year) {
+    if (year > 0) {
+        this->year = year;
     }
 }
 
@@ -46,5 +45,5 @@ void Student::displayInfo() const {
     cout << "Student Name: " << name << endl;
     cout << "ID: " << id << endl;
     cout << "Program: " << program << endl;
-    cout << "Level: " << level << endl;
+    cout << "Year: " << year << endl;
 }

@@ -10,17 +10,17 @@ using namespace std;
 class Student : public Person {
 private:
     string program;
-    int level;
+    int year;
 
 public:
     Student();
-    Student(string name, string id, string program, int level);
+    Student(string name, string id, string program, int year);
 
     string getProgram() const;
     void setProgram(string program);
 
-    int getLevel() const;
-    void setLevel(int level);
+    int getYear() const;
+    void setYear(int year);
 
     string getType() const;
 

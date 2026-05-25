@@ -9,16 +9,14 @@ AttendanceRecord::AttendanceRecord() {
     date = "";
     status = "Absent";
 }
+// We use lots of constants down in the code because most of the record's functions should not be altered or changed
 
 AttendanceRecord::AttendanceRecord(string studentId, string date, string status) {
     this->studentId = studentId;
     this->date = date;
 
-    if (status == "Present" || status == "Absent") {
-        this->status = status;
-    } else {
-        this->status = "Absent";
-    }
+    if (status == "Present" || status == "Absent") {this->status = status;} 
+    else {this->status = "Absent";}
 }
 
 string AttendanceRecord::getStudentId() const {
@@ -42,15 +40,14 @@ void AttendanceRecord::setDate(string date) {
 }
 
 void AttendanceRecord::setStatus(string status) {
-    if (status == "Present" || status == "Absent") {
-        this->status = status;
-    }
+    if (status == "Present" || status == "Absent") 
+    {this->status = status;}
 }
 
 void AttendanceRecord::displayInfo() const {
-    cout << "Student ID: " << studentId << endl;
-    cout << "Date: " << date << endl;
-    cout << "Status: " << status << endl;
+    cout << "Student ID: " << studentId << "\n";
+    cout << "Date: " << date << "\n";
+    cout << "Status: " << status << "\n";
 }
 
 bool AttendanceRecord::isPresent() const {
@@ -61,7 +58,7 @@ bool AttendanceRecord::isAbsent() const {
     return status == "Absent";
 }
 
-ostream& operator<<(ostream& out, const AttendanceRecord& record) {
+ostream& operator<<(ostream& out, const AttendanceRecord& record) { // overload to be able to print our objects
     out << "Student ID: " << record.studentId
         << " | Date: " << record.date
         << " | Status: " << record.status;

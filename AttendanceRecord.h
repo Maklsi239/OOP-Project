@@ -29,7 +29,7 @@ public:
 
     void displayInfo() const;
 
-    friend ostream& operator<<(ostream& out, const AttendanceRecord& record);
+    friend ostream& operator<<(ostream& out, const AttendanceRecord& record); //friend function cuz varialbles are priv
 };
 
 #endif

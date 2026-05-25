@@ -21,7 +21,6 @@ public:
 
     void setDepartment(string department);
     void setCourse(string course);
-
     void displayInfo() const override;
 };
 
